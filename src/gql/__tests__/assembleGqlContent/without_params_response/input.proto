@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+service BuildRequest {
+  rpc GetConfig (Empty) returns (Empty) {
+  }
+}
+
+message Empty {}

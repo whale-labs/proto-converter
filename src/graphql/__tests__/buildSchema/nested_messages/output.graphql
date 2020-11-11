@@ -1,0 +1,23 @@
+type TypeA {
+  field_a: TypeA_TypeD
+  field_b: TypeA_TypeD
+}
+
+type TypeA_TypeD {
+  nest_field_b: TypeA_TypeD_TypeE
+}
+
+enum TypeA_TypeD_TypeE {
+  BAD
+  GOOD
+  BETTER
+}
+
+type TypeB {
+  field_b: String
+}
+
+type TypeC {
+  field_a: TypeA
+  field_b: TypeB
+}

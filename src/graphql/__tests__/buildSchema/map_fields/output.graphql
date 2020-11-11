@@ -1,0 +1,21 @@
+type Attribute {
+  value: String
+}
+
+type Id_Name_String_String_Response {
+  id: String
+  name: String
+}
+
+type Info_Zone_String_Attribute_Response {
+  info: Attribute
+  zone: Attribute
+}
+
+type NestMap {
+  nest_map: Info_Zone_String_Attribute_Response
+}
+
+type ScalarMap {
+  scalar_map: Id_Name_String_String_Response
+}

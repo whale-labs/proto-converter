@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+service BuildRequest {
+  rpc GetConfig (Empty) returns (ComplexResponse) {
+  }
+}
+
+message Empty {}
+
+message ComplexResponse {
+  NestMap nest_map = 1;
+  ScalarMap scalar_map = 2;
+  repeated string repeated_string = 3;
+  bool scalar_bool = 4;
+  int64 scalar_int64 = 5;
+  EnumType enum_type = 6;
+  TypeC nested_type = 7;
+  repeated TypeB repeated_object = 8;
+}
+
+message NestMap {
+  // [zone,info]
+  map<string, Attribute> nest_map = 1;
+}
+
+message Attribute {
+  string value = 1;
+}
+
+message ScalarMap {
+  // [ id , name ]
+  map<string,string> scalar_map = 1;
+}
+
+enum EnumType {
+  BAD = 0;
+  GOOG = 1;
+  BETTER = 2;
+}
+
+message TypeA {
+  message TypeD {
+    enum TypeE {
+      BAD = 0;
+      GOOD = 1;
+      BETTER = 2;
+    }
+    TypeE nest_field_b = 1;
+  }
+  TypeD field_a = 1;
+  TypeD field_b = 2;
+}
+
+message TypeB {
+  string field_b = 1;
+}
+
+message TypeC {
+  TypeA field_a = 1;
+  TypeB field_b = 2;
+}

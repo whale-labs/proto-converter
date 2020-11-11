@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+message TypeA {
+  message TypeD {
+    enum TypeE {
+      BAD = 0;
+      GOOD = 1;
+      BETTER = 2;
+    }
+    TypeE nest_field_b = 1;
+  }
+  TypeD field_a = 1;
+  TypeD field_b = 2;
+}
+
+message TypeB {
+  string field_b = 1;
+}
+
+message TypeC {
+  TypeA field_a = 1;
+  TypeB field_b = 2;
+}

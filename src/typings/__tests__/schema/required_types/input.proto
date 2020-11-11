@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+message UserInfo {
+  // required
+  repeated string name = 1;
+  // required
+  string age = 2;
+}

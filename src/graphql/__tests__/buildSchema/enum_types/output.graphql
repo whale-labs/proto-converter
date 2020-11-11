@@ -1,0 +1,10 @@
+type EnumType {
+  type: InnerType
+}
+
+enum InnerType {
+  BAD
+  GOOG
+  BETTER
+}
+

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message EnumType {
+  InnerType type = 1;
+}
+
+enum InnerType {
+  BAD = 0;
+  GOOG = 1;
+  BETTER = 2;
+}

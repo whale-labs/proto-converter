@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message EnumTypeWrapper {
+  EnumType type = 1;
+}
+
+enum EnumType {
+  BAD = 0;
+  //default value
+  GOOD = 1;
+  //best value
+  BETTER = 2;
+}

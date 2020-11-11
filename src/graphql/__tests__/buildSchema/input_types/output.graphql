@@ -1,0 +1,12 @@
+input Address {
+  province: String
+  city: String
+}
+
+type Empty
+
+input UserInfo {
+  name: String
+  age: Int
+  address: Address
+}

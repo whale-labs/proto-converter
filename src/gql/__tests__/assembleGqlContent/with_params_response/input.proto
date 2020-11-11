@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service BuildRequest {
+  //get proto config
+  rpc GetConfig (GetConfigRequest) returns (GetConfigResponse) {
+  }
+  rpc SetConfig (SetConfigRequest) returns (SetConfigResponse) {
+  }
+}
+
+message GetConfigRequest {
+  string config_name = 1;
+}
+
+message GetConfigResponse {
+  string name = 1;
+  string path = 2;
+}
+
+message SetConfigRequest {
+  string name = 1;
+  string path = 2;
+}
+
+message SetConfigResponse {
+  string config_name = 1;
+}

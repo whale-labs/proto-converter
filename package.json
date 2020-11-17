@@ -41,6 +41,14 @@
   ],
   "author": "Rich Lee",
   "license": "MIT",
+  "homepage": "https://github.com/whale-labs/proto-converter/#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whale-labs/proto-converter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/whale-labs/proto-converter/issues"
+  },
   "engines": {
     "node": ">=10.0.0"
   },

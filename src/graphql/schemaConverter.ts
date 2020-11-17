@@ -17,7 +17,8 @@ import {
   isMapField,
   isEnum,
   EnhancedReflectionObject,
-  AllField, ProtoInfo
+  AllField,
+  ProtoInfo,
 } from '../utils'
 import { isEmpty, reduce } from 'lodash'
 import { createProtoTypeByMapField } from '../createMapMessage'
@@ -27,7 +28,7 @@ export default class SchemaConverter {
   private root: protobuf.Root
   private messages: EnhancedReflectionObject[]
 
-  constructor({messages,root}: ProtoInfo) {
+  constructor({ messages, root }: ProtoInfo) {
     this.root = root
     this.messages = messages
     this.createSchema()
@@ -83,7 +84,7 @@ export default class SchemaConverter {
           [key]: {
             value: enm.values[key].valueOf(),
           },
-        }))
+        })),
       ),
     })
     return enumType

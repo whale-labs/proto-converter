@@ -1,11 +1,16 @@
-import { createFileWithSource, createFileName, ProtoInfo } from '../utils'
+import {
+  createFileWithSource,
+  createFileName,
+  ProtoInfo,
+  LINE_FEED,
+} from '../utils'
 import { createSchemaSource } from './buildSchema'
 import createGraphqlRequest from './buildRequest'
 
 export const createSource = (protoInfo: ProtoInfo) => {
   const graphqlSource = createGraphqlRequest(protoInfo)
   const schemaSource = createSchemaSource(protoInfo)
-  return [graphqlSource, schemaSource].join('\n\n')
+  return [graphqlSource, schemaSource].join(`${LINE_FEED}${LINE_FEED}`)
 }
 
 export const protoToGraphql = (protoInfo: ProtoInfo) => {

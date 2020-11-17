@@ -1,7 +1,8 @@
 import protobuf from 'protobufjs'
 import { isEmpty, isString, upperFirst } from 'lodash'
 import { pathCheck, quitProcess, warnTip } from './index'
-import { DEFAULT_REQUIRED_KEY, getConverterConfig, getServiceName } from './config'
+import { getConverterConfig, getServiceName } from './config'
+import { DEFAULT_REQUIRED_KEY } from './constants'
 import {
   GraphQLFloat,
   GraphQLInt,
@@ -54,7 +55,7 @@ const ScalarTypeMap = {
 }
 
 export function isScalar(type: any) {
-  return Object.prototype.hasOwnProperty.call(ScalarTypeMap,type)
+  return Object.prototype.hasOwnProperty.call(ScalarTypeMap, type)
 }
 
 export function convertScalar(type: string) {
@@ -75,8 +76,10 @@ const PROTOBUF_TYPES = [
 ]
 export const typeClassName = (type: any) => type?.constructor?.name
 
-export const whichType = (type: unknown, typeName: typeof PROTOBUF_TYPES[number]) =>
-  typeClassName(type) === typeName
+export const whichType = (
+  type: unknown,
+  typeName: typeof PROTOBUF_TYPES[number],
+) => typeClassName(type) === typeName
 
 export const isType = (type: unknown) => whichType(type, 'Type')
 
@@ -93,16 +96,19 @@ export function getServices({ nestedArray }: protobuf.Namespace) {
   return nestedArray?.filter(isService) as protobuf.Service[]
 }
 
-export function fullTypeName(type: protobuf.ReflectionObject | string | null, needPrefix=true): string {
+export function fullTypeName(
+  type: protobuf.ReflectionObject | string | null,
+  needPrefix = true,
+): string {
   if (!type) {
     quitProcess(`cant't get fullTypeName of ${type}`)
   }
   // TODO: configuration
   const serviceName = getServiceName()
-  const prefix = (needPrefix && serviceName) ? upperFirst(serviceName) : ''
+  const prefix = needPrefix && serviceName ? upperFirst(serviceName) : ''
   const name = isString(type) ? type : type!.name
   const suffix = isMapField(type) ? 'Map' : ''
-  return [prefix,name,suffix].filter(Boolean).join('_')
+  return [prefix, name, suffix].filter(Boolean).join('_')
 }
 
 export function isRequired(field: protobuf.ReflectionObject) {
@@ -112,8 +118,8 @@ export function isRequired(field: protobuf.ReflectionObject) {
   return comment.startsWith(DEFAULT_REQUIRED_KEY)
 }
 
-export function getMapKeys({comment,name}: protobuf.ReflectionObject) {
-  if(!comment){
+export function getMapKeys({ comment, name }: protobuf.ReflectionObject) {
+  if (!comment) {
     return warnTip(`${name}: no comment of the map field!`)
   }
   const keysRegex = /\[[\w,\s]+\]/g
@@ -141,7 +147,7 @@ export async function geteRootProto(protoPath: string) {
 }
 
 function createNamespaceByNested(
-  nested: protobuf.NamespaceBase['nested'] = {}
+  nested: protobuf.NamespaceBase['nested'] = {},
 ) {
   const n = new protobuf.Namespace('main_proto')
   const nestedArray = Object.values(nested)
@@ -173,7 +179,7 @@ export function getMainProto({ nested, files }: protobuf.Root) {
 
 export async function getProtoInfo(
   protoPath: string,
-  serviceName: string
+  serviceName: string,
 ): Promise<ProtoInfo> {
   const config = getConverterConfig(protoPath, serviceName)
   const root = await geteRootProto(config.protoPath)
@@ -196,4 +202,3 @@ export function lookup(path: string, root: protobuf.Root) {
   }
   return r
 }
-

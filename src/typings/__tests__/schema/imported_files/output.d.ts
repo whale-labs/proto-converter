@@ -3,10 +3,10 @@ export interface DirectType {
   field_b?: ImportTypeB
 }
 
-export interface  ImportTypeA {
+export interface ImportTypeA {
   field_a?: string
 }
 
-export interface  ImportTypeB {
+export interface ImportTypeB {
   field_b?: string
 }

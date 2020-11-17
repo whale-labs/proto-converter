@@ -9,13 +9,8 @@ export const PROJECT_PATH = fs.realpathSync(process.cwd())
 
 export const CONFIG_PATH = systemPath.resolve(
   PROJECT_PATH,
-  'proto-converter.config.js'
+  'proto-converter.config.js',
 )
-
-export const DEFAULT_REQUEST_PREFIX = 'req'
-
-export const DEFAULT_REQUIRED_KEY = 'required'
-
 
 export const PRETTIER_CONFIG = {
   proseWrap: 'never',

@@ -12,14 +12,14 @@ export default class ProtoConverter {
   }
 
   use(fn: ProtoConverterMiddleware | ProtoConverterMiddleware[]) {
-    if(!fn) return
+    if (!fn) return
     const callbacks = arrify(fn)
     if (callbacks.length === 0) return
     for (let i = 0; i < callbacks.length; i++) {
       const cb = callbacks[i]
       if (typeof cb !== 'function') {
         throw new TypeError(
-          'requires a middleware function but got a ' + getType(fn)
+          'requires a middleware function but got a ' + getType(cb),
         )
       }
       this.middlewares.push(cb)

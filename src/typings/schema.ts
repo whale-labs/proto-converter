@@ -7,6 +7,7 @@ import {
   isMapField,
   AllField,
   EnhancedReflectionObject,
+  LINE_FEED,
 } from '../utils'
 import { isEmpty } from 'lodash'
 import { createProtoTypeByMapField } from '../createMapMessage'
@@ -42,7 +43,7 @@ export class SchemaTyping {
   }
 
   createSource() {
-    return [...this.types.values()].flat().join('\n')
+    return [...this.types.values()].flat().join(LINE_FEED)
   }
 
   // TODO: doesn't handle oneofs yet
@@ -71,7 +72,7 @@ export class SchemaTyping {
 
   private createFieldItem(fieldsArray: protobuf.Field[]) {
     if (isEmpty(fieldsArray)) return ''
-    return fieldsArray.map(this.createTypeItem.bind(this)).join('\n')
+    return fieldsArray.map(this.createTypeItem.bind(this)).join(LINE_FEED)
   }
 
   private createTypeItem(field: AllField) {
@@ -120,11 +121,11 @@ export class SchemaTyping {
     const { values, comments } = enumMessage
     return Object.keys(values)
       .map(
-        (key: string) =>`
+        (key: string) => `
         ${assembleComment({
-            comment: comments[key],
-            inline: true,
-          })}${key} = "${key}"`,
+          comment: comments[key],
+          inline: true,
+        })}${key} = "${key}"`,
       )
       .join(',')
   }

@@ -1,12 +1,12 @@
-import { createSchemaSource } from '../../buildSchema'
-import { testerFactory } from '../../../testUtils/compareContent'
+import { createSchemaSource } from 'src/graphql/buildSchema'
+import { testerFactory } from 'src/testUtils/compareContent'
 
 const schemaConverterTester = testerFactory({
   path: __dirname,
   createSourceFunc: createSchemaSource,
 })
 
-describe('converter', () => {
+describe('build schema', () => {
   it(`enum`, async () => schemaConverterTester('enum_types'))
   it(`imported files`, async () => schemaConverterTester('imported_files'))
   it(`input types`, async () => schemaConverterTester('input_types'))

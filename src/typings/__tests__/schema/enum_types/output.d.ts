@@ -1,9 +1,9 @@
 export enum EnumType {
-  BAD = "BAD",
+  BAD = 'BAD',
   //default value
-  GOOD = "GOOD",
+  GOOD = 'GOOD',
   //best value
-  BETTER = "BETTER"
+  BETTER = 'BETTER',
 }
 
 export interface EnumTypeWrapper {

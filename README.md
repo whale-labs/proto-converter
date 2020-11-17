@@ -176,3 +176,7 @@ message GetConfigResponse {
   map<string,string> scalar_map = 1;
 }
 ```
+
+## todo
+
+- map JSON

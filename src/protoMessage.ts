@@ -1,10 +1,4 @@
-import {
-  getMethods,
-  isScalar,
-  lookup,
-  isType,
-  quitProcess,
-} from './utils'
+import { getMethods, isScalar, lookup, isType, quitProcess } from './utils'
 import { isEmpty, isString, values, each, sortBy } from 'lodash'
 
 export interface EnhancedReflectionObject extends protobuf.ReflectionObject {
@@ -137,6 +131,6 @@ export default class ProtoMessage {
 
   getMessages() {
     // sort for testing easily
-    return sortBy(this.messages,['name'])
+    return sortBy(this.messages, ['name'])
   }
 }

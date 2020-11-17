@@ -15,7 +15,7 @@ const defaultInspectOptions = {
 export const customInspect = (
   data: unknown | unknown[],
   options: string | Record<string, unknown> = {},
-  name = 'log'
+  name = 'log',
 ) => {
   if ('string' === typeof options) {
     name = options
@@ -23,10 +23,15 @@ export const customInspect = (
   }
   const d = Array.isArray(data) ? data : [data]
   console.log(
-    `=========================================${name}==========================================`
+    `=========================================${name}==========================================`,
   )
   d.map((d: unknown) =>
-    console.info(inspect(d, { ...defaultInspectOptions, ...(options as Record<string, unknown>) }))
+    console.info(
+      inspect(d, {
+        ...defaultInspectOptions,
+        ...(options as Record<string, unknown>),
+      }),
+    ),
   )
 }
 

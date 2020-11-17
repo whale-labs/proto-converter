@@ -1,5 +1,5 @@
-import createGraphqlRequest from '../../buildRequest'
-import { testerFactory } from '../../../testUtils/compareContent'
+import createGraphqlRequest from 'src/graphql/buildRequest'
+import { testerFactory } from 'src/testUtils/compareContent'
 
 const schemaConverterTester = testerFactory({
   path: __dirname,
@@ -8,5 +8,6 @@ const schemaConverterTester = testerFactory({
 
 describe('build graphql request', () => {
   it(`single service`, async () => schemaConverterTester('single_service'))
-  it(`multiple services`, async () => schemaConverterTester('multiple_services'))
+  it(`multiple services`, async () =>
+    schemaConverterTester('multiple_services'))
 })

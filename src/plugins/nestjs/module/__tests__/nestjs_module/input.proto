@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package nestjs.service;
+
+service CreateNestjsServie {
+  rpc AddMethod(Empty) returns (EmptyRes);
+  rpc ListMethods(Empty) returns (EmptyRes);
+}
+
+service Test {
+  rpc AddMethod(Empty) returns (EmptyRes);
+  rpc ListMethods(Empty) returns (EmptyRes);
+}
+
+message Empty {}
+
+message EmptyRes {}

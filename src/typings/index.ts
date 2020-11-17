@@ -3,6 +3,7 @@ import {
   createFileName,
   ProtoInfo,
   getInterfaceFileNamePrefix,
+  LINE_FEED,
 } from '../utils'
 import { isEmpty } from 'lodash'
 import createServicesType from './service'
@@ -13,8 +14,8 @@ export const createTypingSource = (protoInfo: ProtoInfo) => {
   const importSource = `import { Observable } from 'rxjs';`
   const serviceSource = createServicesType(protoInfo)
   const schemaSource = createSchemaTypingSource(protoInfo)
-  if(isEmpty(serviceSource)) return schemaSource
-  return [importSource, serviceSource, schemaSource].join('\n')
+  if (isEmpty(serviceSource)) return schemaSource
+  return [importSource, serviceSource, schemaSource].join(LINE_FEED)
 }
 
 export const buildInterface = (protoInfo: ProtoInfo) => {

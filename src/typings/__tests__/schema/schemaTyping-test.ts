@@ -1,5 +1,5 @@
 import { createSchemaTypingSource } from '../../schema'
-import { testerFactory } from '../../../testUtils/compareContent'
+import { testerFactory } from 'src/testUtils/compareContent'
 
 const schemaConverterTester = testerFactory({
   path: __dirname,

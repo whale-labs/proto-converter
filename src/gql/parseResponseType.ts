@@ -7,6 +7,7 @@ import {
   getMapKeys,
   warnTip,
   ProtoInfo,
+  LINE_FEED,
 } from '../utils'
 
 type ParseResponseField = (
@@ -56,7 +57,7 @@ function parseResponseFields(responseType: string, protoInfo: ProtoInfo) {
 
   const tempRes = Object.values(fields)
     .map((r) => parseFieldHandler(r, protoInfo))
-    .join('\n')
+    .join(LINE_FEED)
   return tempRes ? `{${tempRes}}` : ''
 }
 

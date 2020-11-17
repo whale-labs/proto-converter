@@ -12,7 +12,7 @@ import {
   fullTypeName,
   ProtoInfo,
   DEFAULT_REQUEST_PREFIX,
-  formatMethodName,
+  createGraphqlMethodName,
 } from '../utils'
 import { Method } from 'protobufjs'
 
@@ -44,7 +44,7 @@ const assembleRequestItem = (method: protobuf.Method, root: protobuf.Root) => {
     fields: {},
   })
   return {
-    [formatMethodName(method)]: {
+    [createGraphqlMethodName(method)]: {
       type: returnType,
       description: assembleComment({ comment, label: '' }) || null,
       // `args` describes the arguments that the `[name]` query accepts

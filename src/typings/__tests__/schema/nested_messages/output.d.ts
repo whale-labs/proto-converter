@@ -8,9 +8,9 @@ export interface TypeA_TypeD {
 }
 
 export enum TypeA_TypeD_TypeE {
-  BAD = "BAD",
-  GOOD = "GOOD",
-  BETTER = "BETTER"
+  BAD = 'BAD',
+  GOOD = 'GOOD',
+  BETTER = 'BETTER',
 }
 
 export interface TypeB {

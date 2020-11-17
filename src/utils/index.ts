@@ -3,11 +3,13 @@ import { errorTip, successTip } from './log'
 import { format, Options as PrettierOptions } from 'prettier'
 import { PROJECT_PATH, PRETTIER_CONFIG } from './config'
 import { camelCase, isObject, isString } from 'lodash'
+import { LINE_FEED } from './constants'
 
 export * from './config'
 export * from './proto'
 export * from './log'
 export * from './typings'
+export * from './constants'
 
 const getPrettierConfig = () => {
   try {
@@ -82,9 +84,14 @@ export const createFileWithSource = ({
   successTip(`${newFile} has been created!`)
 }
 
-export const formatMethodName = ({name,parent}: protobuf.Method) => [parent?.name,name].map(camelCase).join('_')
-export const formatGqlMethodName = (method: protobuf.Method) => formatMethodName(method)
-export const formatServiceName = ({name}: protobuf.Method) => camelCase(name)
+export const createGraphqlMethodName = ({ name, parent }: protobuf.Method) =>
+  [parent?.name, name].map(camelCase).join('_')
+
+export const createGqlMethodName = (method: protobuf.Method) =>
+  createGraphqlMethodName(method)
+
+export const createTypingMethodName = ({ name }: protobuf.Method) =>
+  camelCase(name)
 
 const maybeQueryRegex = /^(get|list)/i
 export const maybeQueryMethod = (methodName: string) =>
@@ -94,23 +101,27 @@ export const getRequestType = (methodName: string) =>
   maybeQueryMethod(methodName) ? 'query' : 'mutation'
 
 interface AssembleCommentConfig {
-  comment: string | null,
-  label?: string,
+  comment: string | null
+  label?: string
   inline?: boolean
 }
-export const assembleComment = (commentInfo: string | null | AssembleCommentConfig) =>{
+
+export const assembleComment = (
+  commentInfo: string | null | AssembleCommentConfig,
+) => {
   const defaultLabel = '//'
   let comment: AssembleCommentConfig['comment'] = ''
   let label: AssembleCommentConfig['label'] = defaultLabel
   let inline: AssembleCommentConfig['inline'] = false
-  if(isString(commentInfo)){
+  if (isString(commentInfo)) {
     comment = commentInfo
   }
-  if(isObject(commentInfo)){
+  if (isObject(commentInfo)) {
     comment = commentInfo.comment
     label = commentInfo.label ?? defaultLabel
     inline = commentInfo.inline
   }
-  return comment ? `${label}${comment.replace(/\n/g, '')}${inline ? '\n' : ''}` : ''
+  return comment
+    ? `${label}${comment.replace(/\n/g, '')}${inline ? LINE_FEED : ''}`
+    : ''
 }
-

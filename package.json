@@ -16,8 +16,7 @@
   "lint-staged": {
     "src/**/*.{ts}": [
       "eslint",
-      "prettier --parser=typescript --write",
-      "git add"
+      "prettier --parser=typescript --write"
     ]
   },
   "husky": {

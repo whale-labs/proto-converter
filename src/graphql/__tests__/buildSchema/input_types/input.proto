@@ -1,7 +1,8 @@
 syntax = "proto3";
 
 service RpcService{
-    rpc addUser(UserInfo) returns(Empty){}
+    rpc addUser(UserInfo) returns(UserInfo){}
+    rpc setUser(UniqueReq) returns(UserInfo){}
 }
 
 message UserInfo {
@@ -15,4 +16,6 @@ message Address {
     string city = 2;
 }
 
-message Empty {}
+message UniqueReq {
+    string field_a = 1;
+}

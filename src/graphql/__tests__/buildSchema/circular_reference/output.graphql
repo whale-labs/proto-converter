@@ -1,0 +1,23 @@
+type CircleA {
+  field_a: String
+  field_b: CircleB
+  field_c: CircleC
+}
+
+type CircleB {
+  field_a: String
+  field_b: CircleA
+  field_c: CircleC
+}
+
+type CircleC {
+  field_a: String
+  field_b: CircleA
+  field_c: CircleB
+}
+
+type CircularMessage {
+  field_a: String
+  circle: CircularMessage
+  circleList: [CircularMessage]
+}

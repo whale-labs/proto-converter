@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+service CircularReference {
+  rpc GetConfig (Empty) returns (CircularMessage) {
+  }
+  rpc GetCircle (Empty) returns (CircleA) {
+  }
+}
+
+message CircularMessage {
+  string field_a = 1;
+  repeated CircularMessage circleList = 3;
+}
+
+message CircleA {
+  string field_a = 1;
+  CircleB a_b = 2;
+  CircleC a_c = 3;
+}
+
+message CircleB {
+  string field_b = 1;
+  CircleA b_a = 2;
+  CircleC b_c = 3;
+}
+
+message CircleC {
+  string field_c = 1;
+  CircleA c_a = 2;
+  CircleB c_b = 3;
+}
+
+message Empty {}

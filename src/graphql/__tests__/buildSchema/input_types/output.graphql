@@ -1,12 +1,25 @@
-input Address {
+type Address {
   province: String
   city: String
 }
 
-type Empty
+input AddressInput {
+  province: String
+  city: String
+}
 
-input UserInfo {
+input UniqueReqInput {
+  field_a: String
+}
+
+type UserInfo {
   name: String
   age: Int
   address: Address
+}
+
+input UserInfoInput {
+  name: String
+  age: Int
+  address: AddressInput
 }

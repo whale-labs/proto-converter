@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+message CircularMessage {
+  string field_a = 1;
+  CircularMessage circle = 2;
+  repeated CircularMessage circleList = 3;
+}
+
+message CircleA {
+  string field_a = 1;
+  CircleB field_b = 2;
+  CircleC field_c = 3;
+}
+
+message CircleB {
+  string field_a = 1;
+  CircleA field_b = 2;
+  CircleC field_c = 3;
+}
+
+message CircleC {
+  string field_a = 1;
+  CircleA field_b = 2;
+  CircleB field_c = 3;
+}

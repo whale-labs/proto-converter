@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package HandleInput;
+
+import "import.proto";
+
+service RpcService{
+  rpc addUser(UserInfo) returns(UserInfo){}
+  rpc listUser(ListParams) returns(ListResponse){}
+}
+
+message UserInfo {
+  string name = 1;
+  Address address = 2;
+  proto.converter.ToBeImported imported = 3;
+}
+
+message Address {
+  string province = 1;
+  string city = 2;
+}
+
+message ListParams {
+  SameReference same_reference = 1;
+}
+
+message ListResponse {
+  SameReference same_reference = 1;
+  Address address = 2;
+}
+
+message SameReference {
+  string field_a = 1;
+}

@@ -4,7 +4,7 @@ type EnumType {
 
 enum InnerType {
   BAD
-  GOOG
+  GOOD
   BETTER
 }
 

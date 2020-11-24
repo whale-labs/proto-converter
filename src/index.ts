@@ -2,10 +2,10 @@ import { getProtoInfo } from './utils/proto'
 import { customInspect } from './utils/log'
 import { ProtoInfo } from './utils/proto'
 import ProtoConverter from './protoConverter'
-import protoToGraphql from './graphql'
 
 export { buildInterface } from './typings'
 export { buildGql } from './gql'
+export { buildGraphql } from './graphql'
 
 export interface ConvertProps {
   protoPath: string
@@ -14,7 +14,6 @@ export interface ConvertProps {
 
 function convert(protoInfo: ProtoInfo) {
   const protoConverter = new ProtoConverter(protoInfo)
-  protoConverter.use(protoToGraphql)
   protoConverter.use(protoInfo.config.plugins)
   protoConverter.dispatch()
 }

@@ -3,7 +3,7 @@ import { testerFactory } from 'src/testUtils/compareContent'
 
 const schemaConverterTester = testerFactory({
   path: __dirname,
-  createSourceFunc: ({ services }) => createSource(services!),
+  createSourceFunc: createSource,
   outputFileName: 'output.js',
   parser: 'typescript',
   serviceName: 'nestjs',

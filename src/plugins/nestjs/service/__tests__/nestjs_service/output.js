@@ -14,8 +14,8 @@ export class CreateNestjsServie implements OnModuleInit {
     )
   }
 
-  public async addMethod(req) {
-    return await this.createNestjsServie.addMethod(req).toPromise()
+  public async addMethod() {
+    return await this.createNestjsServie.addMethod({}).toPromise()
   }
 
   public async listMethods(req) {
@@ -35,8 +35,8 @@ export class CreateNestjsResolver implements OnModuleInit {
     )
   }
 
-  public async addMethod(req) {
-    return await this.createNestjsResolver.addMethod(req).toPromise()
+  public async addMethod() {
+    return await this.createNestjsResolver.addMethod({}).toPromise()
   }
 
   public async listMethods(req) {

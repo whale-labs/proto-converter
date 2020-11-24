@@ -2,13 +2,13 @@ type Query {
   """
   get proto config
   """
-  buildRequest_getConfig(req: GetConfigRequest): GetConfigResponse
+  buildRequest_getConfig: GetConfigResponse
   """
   list proto config
   """
-  buildRequest_listConfig(req: ListConfigRequest): ListConfigResponse
+  buildRequest_listConfig(req: ListConfigRequestInput): ListConfigResponse
 }
 
 type Mutation {
-  buildRequest_setConfig(req: SetConfigRequest): SetConfigResponse
+  buildRequest_setConfig(req: SetConfigRequestInput): SetConfigResponse
 }

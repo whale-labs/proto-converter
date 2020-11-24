@@ -31,6 +31,29 @@ const ScalarTypeMap = {
   bytes: 'string',
 }
 
+// TODO: should be from configuration
+export function createEnumItem(enumMessage: protobuf.Enum) {
+  const { values, comments } = enumMessage
+  return Object.keys(values)
+    .map(
+      (key: string) => `
+      ${assembleComment({
+        comment: comments[key],
+        inline: true,
+      })}${key} = "${key}"`,
+    )
+    .join(',')
+}
+
+export function createEnumType(enumMessage: protobuf.Enum) {
+  return `
+  ${assembleComment(enumMessage.comment)}
+  export enum ${enumMessage.name} {
+    ${createEnumItem(enumMessage)}
+  }
+  `
+}
+
 export class SchemaTyping {
   private types: Map<string, string> = new Map([])
   private root: protobuf.Root
@@ -43,7 +66,7 @@ export class SchemaTyping {
   }
 
   createSource() {
-    return [...this.types.values()].flat().join(LINE_FEED)
+    return [...this.types.values()].flat().filter(Boolean).join(LINE_FEED)
   }
 
   // TODO: doesn't handle oneofs yet
@@ -54,7 +77,7 @@ export class SchemaTyping {
   private handleMessage(message: EnhancedReflectionObject) {
     let type: string
     if (isEnum(message)) {
-      type = this.createEnumType(message as protobuf.Enum)
+      type = createEnumType(message as protobuf.Enum)
     } else {
       type = this.createMessageType(message as protobuf.Type)
     }
@@ -63,6 +86,10 @@ export class SchemaTyping {
 
   private createMessageType(message: protobuf.Type) {
     const { name, fieldsArray } = message
+    // TODO: this should be configurable
+    /* if (isEmpty(fieldsArray) && message['isInput']) {
+      return ''
+    } */
     return `
     export interface ${name} {
       ${this.createFieldItem(fieldsArray)}
@@ -105,29 +132,6 @@ export class SchemaTyping {
     const mapMessage = createProtoTypeByMapField(field as protobuf.MapField)
     this.handleMessage(mapMessage as any)
     return mapMessage.name
-  }
-
-  private createEnumType(enumMessage: protobuf.Enum) {
-    return `
-    ${assembleComment(enumMessage.comment)}
-    export enum ${enumMessage.name} {
-      ${this.createEnumItem(enumMessage)}
-    }
-    `
-  }
-
-  // TODO: should be from configuration
-  private createEnumItem(enumMessage: protobuf.Enum) {
-    const { values, comments } = enumMessage
-    return Object.keys(values)
-      .map(
-        (key: string) => `
-        ${assembleComment({
-          comment: comments[key],
-          inline: true,
-        })}${key} = "${key}"`,
-      )
-      .join(',')
   }
 }
 

@@ -3,20 +3,42 @@ import {
   isScalar,
   lookup,
   isEnum,
-  typeClassName,
   getMapKeys,
   warnTip,
   ProtoInfo,
   LINE_FEED,
+  isMapField,
 } from '../utils'
 
-type ParseResponseField = (
-  filed: protobuf.Field & protobuf.MapField,
-  protoInfo: ProtoInfo,
-) => string
+type CustomField = protobuf.Field & protobuf.MapField
+type ParseResponseField = (field: CustomField) => string
+
+let protoInfo: ProtoInfo
+// handle circular reference
+let parents: string[] = []
+
+function lookupType(typeName: string) {
+  return (
+    protoInfo.messages.find(({ name }) => name === typeName) ||
+    lookup(typeName, protoInfo.root)
+  )
+}
+
+function parseResponseFields(responseType: string) {
+  if (isScalar(responseType)) return ''
+
+  const typeValue = lookupType(responseType)
+  if (isEnum(typeValue)) return ''
+
+  const fields = (typeValue as any).fields as protobuf.Field
+  if (isEmpty(fields)) return ''
+
+  const tempRes = Object.values(fields).map(parseFieldHandler).join(LINE_FEED)
+  return tempRes ? `{${tempRes}}` : ''
+}
 
 // BEWARE: just for golang
-const parseMapField: ParseResponseField = (field, protoInfo) => {
+const parseMapField: ParseResponseField = (field) => {
   const { name, type, keyType } = field
   const keys = getMapKeys(field)
   if (!keys) return name
@@ -24,41 +46,31 @@ const parseMapField: ParseResponseField = (field, protoInfo) => {
   if (!isScalar(keyType)) {
     warnTip(`the keyType of map field ${name} is not a scalar type!`)
   }
-  return `${name} {${keys.map(
-    (i) => `${i} ${parseResponseFields(type, protoInfo)}`,
-  )}}`
+  return `${name} {${keys.map((i) => `${i} ${parseResponseFields(type)}`)}}`
 }
 
-const parseNormalField: ParseResponseField = (field, protoInfo) => {
+const parseFieldHandler: ParseResponseField = (field) => {
   const { name, type } = field
-  return `${name} ${parseResponseFields(type, protoInfo)}`
+  if (isMapField(field)) return parseMapField(field)
+  if (isScalar(type) || parents.includes(type)) return name
+  parents.push(type)
+  return `${name} ${parseResponseFields(type)}`
 }
 
-const parseFieldMap = new Map([
-  ['Field', parseNormalField],
-  ['MapField', parseMapField],
-])
-
-const parseFieldHandler: ParseResponseField = (field, protoInfo) => {
-  const handler = parseFieldMap.get(typeClassName(field) || 'Field')!
-  return handler(field, protoInfo)
-}
-
-function parseResponseFields(responseType: string, protoInfo: ProtoInfo) {
-  if (isScalar(responseType)) return ''
-
-  const typeValue =
-    protoInfo.messages.find(({ name }) => name === responseType) ||
-    lookup(responseType, protoInfo.root)
-  if (isEnum(typeValue)) return ''
-
-  const fields = (typeValue as any).fields as protobuf.Field
-  if (isEmpty(fields)) return ''
-
-  const tempRes = Object.values(fields)
-    .map((r) => parseFieldHandler(r, protoInfo))
+function parseResponseType(responseType: string) {
+  const typeValue = lookupType(responseType) as protobuf.Type
+  const result = Object.values(typeValue.fields)
+    .map((f) => {
+      parents = [responseType]
+      return parseFieldHandler(f as CustomField)
+    })
     .join(LINE_FEED)
-  return tempRes ? `{${tempRes}}` : ''
+  return result ? `{${result}}` : ''
 }
 
-export default parseResponseFields
+function parseResponse(responseType: string, info: ProtoInfo) {
+  protoInfo = info
+  return parseResponseType(responseType)
+}
+
+export default parseResponse

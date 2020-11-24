@@ -9,7 +9,8 @@ message Empty {}
 
 message ComplexResponse {
   NestMap nest_map = 1;
-  ScalarMap scalar_map = 2;
+  // [ id , name ]
+  map<string,int32> scalar_map = 2;
   repeated string repeated_string = 3;
   bool scalar_bool = 4;
   int64 scalar_int64 = 5;
@@ -27,14 +28,9 @@ message Attribute {
   string value = 1;
 }
 
-message ScalarMap {
-  // [ id , name ]
-  map<string,string> scalar_map = 1;
-}
-
 enum EnumType {
   BAD = 0;
-  GOOG = 1;
+  GOOD = 1;
   BETTER = 2;
 }
 

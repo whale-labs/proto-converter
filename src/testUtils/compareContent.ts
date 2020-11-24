@@ -1,7 +1,13 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { BuiltInParserName } from 'prettier'
-import { getProtoInfo, ProtoInfo, formatCode, LINE_FEED } from 'src/utils'
+import {
+  getProtoInfo,
+  ProtoInfo,
+  formatCode,
+  LINE_FEED,
+  customInspect,
+} from 'src/utils'
 
 interface TesterFactoryParams {
   path: string
@@ -30,7 +36,9 @@ export function testerFactory({
     const expected = readFileSync(join(testDir, outputFileName), {
       encoding: 'utf8',
     })
-    debug && console.info('[actual, expected]', [actual, expected])
+    if (debug) {
+      customInspect(protoInfo, 'protoInfo')
+    }
     expect(formatFile(actual, parser)).toBe(formatFile(expected, parser))
   }
 }

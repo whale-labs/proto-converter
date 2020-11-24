@@ -1,10 +1,13 @@
 import {
   createInterfaceName,
   DEFAULT_REQUEST_PREFIX,
-  ProtoInfo,
+  isFieldsEmpty,
   LINE_FEED,
 } from '../../../utils'
-import NestjsFile from '../createNestjsFile'
+import NestjsFile, {
+  GenerateContent,
+  EnhancedProtoInfo,
+} from '../createNestjsFile'
 import {
   createGrpcOptionName,
   createServiceInnerName,
@@ -12,51 +15,65 @@ import {
   createServiceMethodName,
 } from '../utils'
 
+let enhanceProtoInfo: EnhancedProtoInfo
+
 const NESTJS_DEPENDENCIES = `
 import { Injectable, OnModuleInit, Inject } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';`
 
-const createImports = (services: protobuf.Service[]) => `
+const createImports: GenerateContent = ({ services }) => `
 ${NESTJS_DEPENDENCIES}
 ${createInterfaceImport(services)};
 `
 
-const createMethod = (serviceInnerName: string, method: string) => {
-  const methodName = createServiceMethodName(method)
+const createMethod = (
+  serviceInnerName: string,
+  { name, requestType }: protobuf.Method,
+) => {
+  const methodName = createServiceMethodName(name)
+  const noFields = isFieldsEmpty(requestType, enhanceProtoInfo.proto)
   return `
-public async ${methodName}(${DEFAULT_REQUEST_PREFIX}) {
-  return await this.${serviceInnerName}.${methodName}(${DEFAULT_REQUEST_PREFIX}).toPromise()
+public async ${methodName}(${noFields ? '' : DEFAULT_REQUEST_PREFIX}) {
+  return await this.${serviceInnerName}.${methodName}(${
+    noFields ? '{}' : DEFAULT_REQUEST_PREFIX
+  }).toPromise()
 }`
 }
 
-const assembleMethods = (serviceInnerName: string, methods: string[]) =>
-  methods.map((m) => createMethod(serviceInnerName, m)).join(LINE_FEED)
+const assembleMethods = ({ name, methods }: protobuf.Service) => {
+  const serviceInnerName = createServiceInnerName(name)
 
-const serviceTemplate = (serviceName: string, methods: string[]) => {
-  const serviceInnerName = createServiceInnerName(serviceName)
-  const interfaceName = createInterfaceName(serviceName)
+  return Object.values(methods)
+    .map((m) => createMethod(serviceInnerName, m))
+    .join(LINE_FEED)
+}
+
+const serviceTemplate = (serivce: protobuf.Service) => {
+  const { name } = serivce
+  const serviceInnerName = createServiceInnerName(name)
+  const interfaceName = createInterfaceName(name)
 
   return `
 @Injectable()
-export class ${serviceName} implements OnModuleInit {
+export class ${name} implements OnModuleInit {
 
   private ${serviceInnerName}: ${interfaceName}
 
   constructor(@Inject('${createGrpcOptionName()}') private readonly client: ClientGrpc) {}
 
   async onModuleInit() {
-      this.${serviceInnerName} = this.client.getService<${interfaceName}>('${serviceName}')
+      this.${serviceInnerName} = this.client.getService<${interfaceName}>('${name}')
   }
 
-  ${assembleMethods(serviceInnerName, methods)}
+  ${assembleMethods(serivce)}
 }
 `
 }
 
-const createContent = (services: ProtoInfo['services']) =>
-  services!
-    .map(({ name, methods }) => serviceTemplate(name, Object.keys(methods)))
-    .join(LINE_FEED)
+const createContent: GenerateContent = (protoInfo) => {
+  enhanceProtoInfo = protoInfo
+  return protoInfo.services.map(serviceTemplate).join(LINE_FEED)
+}
 
 export const { createSource, buildFile: buildService } = new NestjsFile({
   fileType: 'service',

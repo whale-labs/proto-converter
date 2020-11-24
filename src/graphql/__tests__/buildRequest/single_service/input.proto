@@ -2,7 +2,7 @@ syntax = "proto3";
 
 service BuildRequest {
     // get proto config
-    rpc GetConfig (GetConfigRequest) returns (GetConfigResponse) {
+    rpc GetConfig (Empty) returns (GetConfigResponse) {
     }
     // list proto config
     rpc ListConfig (ListConfigRequest) returns (ListConfigResponse) { // this comment should be ignore
@@ -11,6 +11,8 @@ service BuildRequest {
     rpc SetConfig (SetConfigRequest) returns (SetConfigResponse) {
     }
 }
+
+message Empty {}
 
 message GetConfigRequest {
   string config_name = 1;

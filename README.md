@@ -16,15 +16,27 @@ npm install --save-dev proto-converter
 In your `proto-converter.config.js` at the root directory of project:
 
 ```js
-const { buildGql, buildInterface } = require('proto-converter')
+const { buildGql, buildInterface, buildGraphql } = require('proto-converter')
+const {
+  buildService,
+  buildModule,
+  buildResolver,
+} = require('proto-converter/lib/plugins/nestjs/index')
 
 module.exports = {
   // the directory contains proto files
-  sourcePath: './proto.develop',
+  sourcePath: './proto',
   // the output directory
-  outputPath: 'src/graphql',
-  // Optional. An array of proto-converter plugins
-  plugins: [buildGql, buildInterface],
+  outputPath: 'src/test-result',
+  // An array of proto-converter plugins
+  plugins: [
+    buildGraphql,
+    buildGql,
+    buildInterface,
+    buildResolver,
+    buildService,
+    buildModule,
+  ],
 }
 ```
 
@@ -126,12 +138,12 @@ interface EnhancedReflectionObject extends protobuf.ReflectionObject {
 }
 
 interface ConverterConfig {
-  serviceName?: string
   // absolute path of current processing proto file
   protoPath: string
+  plugins: ConverterPlugin[]
+  serviceName?: string
   sourcePath?: string
   outputPath?: string
-  plugins?: ConverterPlugin[]
 }
 ```
 
@@ -151,7 +163,7 @@ module.exports = {
   // optional. The directory in which all generated files are placed.
   // defaults to the root directory of your project.
   outputPath: 'src/graphql',
-  // optional. An array of proto-converter plugins
+  // required. An array of proto-converter plugins
   plugins: [],
 }
 ```

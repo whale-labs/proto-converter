@@ -2,7 +2,13 @@ import { isFunction } from 'lodash'
 import { createFileWithSource, LINE_FEED, ProtoInfo } from '../../utils'
 import { createNestjsFileName, NestjsFileType } from './utils'
 
-export type GenerateContent = (services: protobuf.Service[]) => string
+type NotNullRecord<T> = {
+  [P in keyof T]: NonNullable<T[P]>
+}
+
+export type EnhancedProtoInfo = NotNullRecord<ProtoInfo>
+
+export type GenerateContent = (protoInfo: EnhancedProtoInfo) => string
 
 export interface CreateNestjsFileParams {
   fileType: NestjsFileType
@@ -17,16 +23,20 @@ export default class NestjsFile {
     this.config = config
   }
 
-  private createSource(services: protobuf.Service[]) {
+  private createSource(protoInfo: ProtoInfo) {
+    if (!protoInfo.services) return ''
     const { createImports, createContent } = this.config
-    const imports = isFunction(createImports) ? createImports(services) : ''
-    const resolverContent = createContent(services)
+    const imports = isFunction(createImports)
+      ? createImports(protoInfo as EnhancedProtoInfo)
+      : ''
+    const resolverContent = createContent(protoInfo as EnhancedProtoInfo)
     return [imports, resolverContent].join(LINE_FEED)
   }
 
-  private buildFile({ services, config }: ProtoInfo) {
+  private buildFile(protoInfo: ProtoInfo) {
+    const { services, config } = protoInfo
     if (!services) return
-    const source = this.createSource.call(this, services)
+    const source = this.createSource.call(this, protoInfo)
     const fileName = createNestjsFileName(this.config.fileType)
     createFileWithSource({
       source,

@@ -23,10 +23,19 @@ import {
 import { isEmpty, reduce } from 'lodash'
 import { createProtoTypeByMapField } from '../createMapMessage'
 
+function createEmptyObjectType(name: string) {
+  return new GraphQLObjectType({
+    name: name,
+    fields: () => ({}),
+  })
+}
+
 export default class SchemaConverter {
   private types: Map<string, GraphQLNamedType> = new Map([])
   private root: protobuf.Root
   private messages: EnhancedReflectionObject[]
+  // To handle circular reference
+  private parents: string[] = []
 
   constructor({ messages, root }: ProtoInfo) {
     this.root = root
@@ -35,13 +44,20 @@ export default class SchemaConverter {
   }
 
   private createSchema() {
-    this.messages.forEach((m) => this.convertMessageAndEnum(m))
+    this.messages.forEach((m) => {
+      // init parents
+      this.parents = [m.name]
+      this.convertMessageAndEnum(m)
+    })
   }
 
   private convertMessageAndEnum(object: EnhancedReflectionObject) {
     const typeName = fullTypeName(object)
     const existedType = this.existType(typeName)
     if (existedType) return existedType
+
+    this.parents.push(object.name)
+
     let type: GraphQLNamedType
     if (isEnum(object as protobuf.Field)) {
       type = this.convertEnum(object as protobuf.Enum)
@@ -52,9 +68,10 @@ export default class SchemaConverter {
   }
 
   private convertMessage(message: protobuf.Type) {
+    // TODO: using some defaults fields if no fields
     const fields = isEmpty(message.fieldsArray)
       ? {}
-      : this.convertFields(message.fieldsArray)
+      : this.convertFields(message)
     return new ((message as any).isInput
       ? GraphQLInputObjectType
       : GraphQLObjectType)({
@@ -63,7 +80,7 @@ export default class SchemaConverter {
     })
   }
 
-  private convertFields(fields: protobuf.Field[]) {
+  private convertFields(message: protobuf.Type) {
     const createField = (fields: any, field: protobuf.Field) => {
       const name = field.partOf ? field.partOf.name : field.name
       const type = field.partOf
@@ -72,7 +89,7 @@ export default class SchemaConverter {
       fields[name] = { type }
       return fields
     }
-    return reduce(fields, createField, {})
+    return reduce(message.fieldsArray, createField, {})
   }
 
   private convertEnum(enm: protobuf.Enum) {
@@ -105,7 +122,14 @@ export default class SchemaConverter {
 
   private convertDataType(field: AllField) {
     const { type, repeated } = field
-    const baseType = isScalar(type) ? convertScalar(type) : this.getType(type)
+    // handle circular reference
+    const isCircularReference = this.parents.includes(type)
+    // prettier-ignore
+    const baseType = isCircularReference
+      ? createEmptyObjectType(type)
+      : isScalar(type)
+        ? convertScalar(type)
+        : this.getType(type)
     return repeated ? new GraphQLList(baseType) : baseType
   }
 

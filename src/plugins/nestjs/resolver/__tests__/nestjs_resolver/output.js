@@ -11,8 +11,8 @@ export class CreateNestjsServieResolver {
   }
 
   @Mutation('createNestjsServie_addMethod')
-  async addMethod(@Args('req') req) {
-    return await this.createNestjsServie.addMethod(req)
+  async addMethod() {
+    return await this.createNestjsServie.addMethod()
   }
 
   @Query('createNestjsServie_listMethods')
@@ -30,8 +30,8 @@ export class TestResolver {
   }
 
   @Mutation('test_addMethod')
-  async addMethod(@Args('req') req) {
-    return await this.test.addMethod(req)
+  async addMethod() {
+    return await this.test.addMethod()
   }
 
   @Query('test_listMethods')

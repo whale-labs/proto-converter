@@ -35,23 +35,27 @@ const createGraphqlMethods = (
 
 const assembleRequestItem = (method: protobuf.Method, root: protobuf.Root) => {
   const { comment, requestType, responseType } = method
+  const requestObj = root.lookup(requestType)
   const returnType = new GraphQLObjectType({
     name: fullTypeName(root.lookup(responseType)),
     fields: {},
   })
   const request = new GraphQLInputObjectType({
-    name: fullTypeName(root.lookup(requestType)),
+    name: fullTypeName(requestObj),
     fields: {},
   })
+  const baseRequestConfig = {
+    type: returnType,
+    description: assembleComment({ comment, label: '' }) || null,
+  }
+  const hasFields = !isEmpty((requestObj as protobuf.Type).fields)
+  if (hasFields) {
+    baseRequestConfig['args'] = {
+      [DEFAULT_REQUEST_PREFIX]: { type: request },
+    }
+  }
   return {
-    [createGraphqlMethodName(method)]: {
-      type: returnType,
-      description: assembleComment({ comment, label: '' }) || null,
-      // `args` describes the arguments that the `[name]` query accepts
-      args: {
-        [DEFAULT_REQUEST_PREFIX]: { type: request },
-      },
-    },
+    [createGraphqlMethodName(method)]: baseRequestConfig,
   }
 }
 

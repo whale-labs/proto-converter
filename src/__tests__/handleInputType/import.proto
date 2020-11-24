@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package proto.converter;
+
+message ToBeImported {
+  string field_a = 1;
+  NestedImport field_b = 2;
+}
+
+message NestedImport {
+  string field_b = 1;
+}

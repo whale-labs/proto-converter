@@ -14,10 +14,8 @@ export const buildRequest_getConfig = gql`
         }
       }
       scalar_map {
-        scalar_map {
-          id
-          name
-        }
+        id
+        name
       }
       repeated_string
       scalar_bool

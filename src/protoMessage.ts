@@ -16,10 +16,10 @@ function createNestMessageName({ name, parent }: protobuf.Type) {
 
 export default class ProtoMessage {
   private messages: Messages = []
-  private root: protobuf.Root
+  private proto: protobuf.Namespace
 
-  constructor(proto: protobuf.Namespace, root: protobuf.Root) {
-    this.root = root
+  constructor(proto: protobuf.Namespace) {
+    this.proto = proto
     this.findMessage(proto)
   }
 
@@ -126,7 +126,7 @@ export default class ProtoMessage {
   }
 
   private lookup(path: string) {
-    return lookup(path, this.root)
+    return lookup(path, this.proto)
   }
 
   getMessages() {

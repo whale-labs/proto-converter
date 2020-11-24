@@ -4,14 +4,18 @@ package nestjs.service;
 
 service CreateNestjsServie {
   rpc AddMethod(Empty) returns (EmptyRes);
-  rpc ListMethods(Empty) returns (EmptyRes);
+  rpc ListMethods(NotEmpty) returns (EmptyRes);
 }
 
 service CreateNestjsResolver {
   rpc AddMethod(Empty) returns (EmptyRes);
-  rpc ListMethods(Empty) returns (EmptyRes);
+  rpc ListMethods(NotEmpty) returns (EmptyRes);
 }
 
 message Empty {}
 
 message EmptyRes {}
+
+message NotEmpty {
+  string field_a = 1;
+}

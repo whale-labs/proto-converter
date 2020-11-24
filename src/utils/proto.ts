@@ -1,4 +1,4 @@
-import protobuf from 'protobufjs'
+import protobuf, { Namespace } from 'protobufjs'
 import { isEmpty, isString, upperFirst } from 'lodash'
 import { pathCheck, quitProcess, warnTip } from './index'
 import { getConverterConfig, getServiceName } from './config'
@@ -10,8 +10,11 @@ import {
   GraphQLString,
 } from 'graphql'
 import ProtoMessage from '../protoMessage'
+import ProtoInputType from './handleInputType'
 
 export type AllField = protobuf.Field | protobuf.MapField
+
+export type ValidMessageType = protobuf.Type | protobuf.Enum
 
 export interface EnhancedReflectionObject extends protobuf.ReflectionObject {
   isInput?: boolean
@@ -149,12 +152,14 @@ export async function geteRootProto(protoPath: string) {
 function createNamespaceByNested(
   nested: protobuf.NamespaceBase['nested'] = {},
 ) {
-  const n = new protobuf.Namespace('main_proto')
-  const nestedArray = Object.values(nested)
-  return { ...n, nested, nestedArray } as protobuf.Namespace
+  const proto = new Namespace('mainProto')
+  return Object.assign(proto, {
+    nested,
+  }) as protobuf.Namespace
 }
 
-export function getMainProto({ nested, files }: protobuf.Root) {
+export function getMainProto(root: protobuf.Root) {
+  const { nested, files } = root
   if (isEmpty(nested)) {
     quitProcess('nothing to parse!')
   }
@@ -163,18 +168,24 @@ export function getMainProto({ nested, files }: protobuf.Root) {
   // root.nested inclueds service、message、enum and so on
   if (!isNamespace(mainProto)) {
     if (files?.length === 1) {
-      return createNamespaceByNested(nested)
+      mainProto = createNamespaceByNested(nested)
+    } else {
+      quitProcess(`${files[0]} need to define "package" for parsing`)
     }
-    quitProcess('need to define "package" for parse')
-  }
-  while (isNamespace(Object.values(mainProto?.nested || {})[0])) {
-    mainProto = Object.values(mainProto.nested!)[0]
-  }
-  // define "package" and import other files, but define nothing
-  if (isEmpty(mainProto.nested)) {
-    quitProcess('nothing to parse!')
+  } else {
+    while (isNamespace(Object.values(mainProto?.nested || {})[0])) {
+      mainProto = Object.values(mainProto.nested!)[0]
+    }
+    // define "package" and import other files, but define nothing
+    if (isEmpty(mainProto.nested)) {
+      quitProcess('nothing to parse!')
+    }
   }
   return mainProto as protobuf.Namespace
+}
+
+export function formatMainProto(mainProto: protobuf.Namespace) {
+  return new ProtoInputType(mainProto).getProto()
 }
 
 export async function getProtoInfo(
@@ -184,21 +195,27 @@ export async function getProtoInfo(
   const config = getConverterConfig(protoPath, serviceName)
   const root = await geteRootProto(config.protoPath)
   const mainProto = getMainProto(root)
-  const services = getServices(mainProto)
-  const messages = new ProtoMessage(mainProto, root).getMessages()
+  const proto = formatMainProto(mainProto)
+  const services = getServices(proto)
+  const messages = new ProtoMessage(proto).getMessages()
   return {
     root,
-    proto: mainProto,
+    proto,
     services: isEmpty(services) ? null : services,
     messages,
     config,
   }
 }
 
-export function lookup(path: string, root: protobuf.Root) {
-  const r = root.lookup(path)
+export function lookup(path: string, namespace: protobuf.Namespace) {
+  const r = namespace.lookup(path)
   if (!r) {
     throw Error(`"${path}" is undefined, check the proto file!`)
   }
   return r
+}
+
+export function isFieldsEmpty(typeName: string, namespace: protobuf.Namespace) {
+  const result = lookup(typeName, namespace) as ValidMessageType
+  return isEmpty((result as any)?.fields)
 }

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+service RpcService{
+  rpc addUser(UserInfo) returns(UserInfo){}
+  rpc listUser(ListParams) returns(ListResponse){}
+}
+
+message UserInfo {
+  string name = 1;
+  int32 age = 2;
+  Address address = 3;
+}
+
+message Address {
+  string province = 1;
+  string city = 2;
+}
+
+message ListParams {
+  SameReference same_reference = 1;
+}
+
+message ListResponse {
+  SameReference same_reference = 1;
+  Address address = 2;
+}
+
+message SameReference {
+  string field_a = 1;
+}

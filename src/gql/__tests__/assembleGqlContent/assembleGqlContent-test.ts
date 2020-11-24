@@ -16,4 +16,6 @@ describe('build gql content', () => {
   it(`complex response`, async () => schemaConverterTester('complex_response'))
   it(`multiple services`, async () =>
     schemaConverterTester('multiple_services'))
+  it(`circular reference`, async () =>
+    schemaConverterTester('circular_reference'))
 })

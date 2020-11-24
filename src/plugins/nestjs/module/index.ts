@@ -1,6 +1,6 @@
 import { upperFirst } from 'lodash'
 import { getServiceName } from '../../../utils'
-import NestjsFile from '../createNestjsFile'
+import NestjsFile, { GenerateContent } from '../createNestjsFile'
 import {
   createGrpcOptionName,
   createResolverClassName,
@@ -32,7 +32,7 @@ const createModule = (serviceNames: string[], resolverNames: string[]) => `
 export class ${createModuleName()} {}
 `
 
-export const createContent = (services: protobuf.Service[]) => {
+export const createContent: GenerateContent = ({ services }) => {
   const serviceNames = services.map(({ name }) => name)
   const resolverNames = serviceNames.map(createResolverClassName)
   return [

@@ -13,7 +13,7 @@ import {
   getRequestType,
   LINE_FEED,
 } from '../utils'
-import parseResponseFields from './parseResponseType'
+import parseResponse from './parseResponseType'
 
 const parseParams = (requestObject: protobuf.ReflectionObject) => {
   if (isEmpty((requestObject as any).fields)) return ['', '']
@@ -30,7 +30,7 @@ const buildGqlItem = (method: protobuf.Method, protoInfo: ProtoInfo) => {
   )
   const type = getRequestType(name)
   const queryName = createGqlMethodName(method)
-  const res = parseResponseFields(responseType, protoInfo)
+  const res = parseResponse(responseType, protoInfo)
   return `
   ${assembleComment(comment)}
   export const ${queryName} = gql\`
@@ -52,6 +52,7 @@ export const assembleGqlContent = (protoInfo: ProtoInfo) => {
 }
 
 export const buildGql = (protoInfo: ProtoInfo) => {
+  if (isEmpty(protoInfo.services)) return
   createFileWithSource({
     source: assembleGqlContent(protoInfo),
     dir: protoInfo.config.outputPath,

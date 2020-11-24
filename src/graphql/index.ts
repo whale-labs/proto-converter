@@ -13,7 +13,7 @@ export const createSource = (protoInfo: ProtoInfo) => {
   return [graphqlSource, schemaSource].join(`${LINE_FEED}${LINE_FEED}`)
 }
 
-export const protoToGraphql = (protoInfo: ProtoInfo) => {
+export const buildGraphql = (protoInfo: ProtoInfo) => {
   const { config } = protoInfo
   createFileWithSource({
     source: createSource(protoInfo),
@@ -25,4 +25,4 @@ export const protoToGraphql = (protoInfo: ProtoInfo) => {
   })
 }
 
-export default protoToGraphql
+export default buildGraphql

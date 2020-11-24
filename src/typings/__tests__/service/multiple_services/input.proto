@@ -12,9 +12,23 @@ service AnotherRequest {
 
 message GetConfigRequest {
   string config_name = 1;
+  NestedName nested_type_field = 2;
+  InnerType enum_field = 3;
+  // [id,name]
+  map<string,int32> map_field = 4;
 }
 
 message GetConfigResponse {
   string name = 1;
   string path = 2;
+}
+
+message NestedName {
+  string name = 1;
+}
+
+enum InnerType {
+  BAD = 0;
+  GOOD = 1;
+  BETTER = 2;
 }

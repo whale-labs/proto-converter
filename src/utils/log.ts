@@ -10,6 +10,7 @@ export const log: NotificationFunc = (msg) => console.log(`${now()}: ${msg}`)
 
 const defaultInspectOptions = {
   colors: true,
+  depth: 3,
 }
 
 export const customInspect = (

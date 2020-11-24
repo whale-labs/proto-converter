@@ -10,7 +10,7 @@
     "test-coverage": "jest --collectCoverage",
     "preversion": "npm run format && npm run lint && npm run test",
     "version": "npm run build",
-    "postversion": "git push origin $(git_current_branch) && git push --tags",
+    "postversion": "git push && git push --tags",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "lint": "eslint --ext .ts src"
   },

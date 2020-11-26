@@ -2,7 +2,7 @@ import * as shell from 'shelljs'
 import { errorTip, successTip } from './log'
 import { format, Options as PrettierOptions } from 'prettier'
 import { PROJECT_PATH, PRETTIER_CONFIG } from './config'
-import { camelCase, isObject, isString } from 'lodash'
+import { camelCase, isFunction, isObject, isString } from 'lodash'
 import { LINE_FEED } from './constants'
 
 export * from './config'
@@ -61,14 +61,32 @@ export const formatCode = ({
   }
 }
 
+export const execUnderDir = (
+  code: string | ((...args: any[]) => void),
+  dir: string,
+  ...args: any[]
+) => {
+  const originalPath = process.cwd()
+  shell.cd(dir)
+  if (isFunction(code)) {
+    code(...args)
+  } else {
+    shell.exec(code)
+  }
+  shell.cd(originalPath)
+}
+
+const createFile = (fileName: string) => {
+  if (!shell.test('-f', fileName)) {
+    shell.touch(fileName)
+  }
+}
+
 export const touchFile = (dir: string, fileName: string) => {
   if (!shell.test('-d', dir)) {
     shell.mkdir('-p', dir)
   }
-  shell.cd(dir)
-  if (!shell.test('-f', fileName)) {
-    shell.touch(fileName)
-  }
+  execUnderDir(createFile, dir, fileName)
   return `${dir}/${fileName}`
 }
 

@@ -35,7 +35,8 @@ export interface ConverterConfig {
   sourcePath?: string
   protoPath: string
   outputPath?: string
-  plugins?: ConverterPlugin[]
+  rootDir?: string
+  plugins: ConverterPlugin[]
 }
 
 // TODO: the value of "xxx64" should be read from grpc option

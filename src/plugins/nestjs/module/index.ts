@@ -1,11 +1,19 @@
 import { upperFirst } from 'lodash'
-import { getServiceName } from '../../../utils'
+import path from 'path'
+import {
+  doesPathExist,
+  execUnderDir,
+  getServiceName,
+  ProtoInfo,
+  warnTip,
+} from '../../../utils'
 import NestjsFile, { GenerateContent } from '../createNestjsFile'
 import {
   createGrpcOptionName,
   createResolverClassName,
   getServiceFileNamePrefix,
   getResolverFileNamePrefix,
+  createNestjsFileName,
 } from '../utils'
 
 const createImports = (serviceNames: string[], resolverNames: string[]) => `
@@ -41,9 +49,18 @@ export const createContent: GenerateContent = ({ services }) => {
   ].join('\n')
 }
 
+const addModuleToRoot = ({ config: { outputPath, rootDir } }: ProtoInfo) => {
+  const modulePath = path.resolve(outputPath, createNestjsFileName('module'))
+  if (doesPathExist(modulePath)) {
+    return warnTip(`${modulePath} has existed`)
+  }
+  execUnderDir(`nest g mo ${getServiceName()}`, rootDir)
+}
+
 export const { createSource, buildFile: buildModule } = new NestjsFile({
   fileType: 'module',
   createContent,
+  beforeCreate: addModuleToRoot,
 }).getBuildTools()
 
 export default buildModule

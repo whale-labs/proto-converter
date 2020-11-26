@@ -11,7 +11,7 @@ const createServiceMethodType = (method: protobuf.Method) => {
   const { comment, requestType, responseType } = method
   const parsedComment = assembleComment({ comment, inline: true })
   // TODO: this should be configurable
-  // grpc service requires aan empty object when have no request params
+  // grpc service requires an empty object when have no request params
   const requestParam = `${DEFAULT_REQUEST_PREFIX}: ${requestType}`
   // TODO: the responseType wrapper should be read from configuration
   return `${parsedComment}${createTypingMethodName(

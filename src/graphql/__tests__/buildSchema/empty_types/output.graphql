@@ -1,0 +1,4 @@
+type Empty {
+  code: Int
+  message: String
+}

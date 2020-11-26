@@ -16,4 +16,5 @@ describe('build schema', () => {
   it(`repeated fields`, async () => schemaConverterTester('repeated_fields'))
   it(`scalar types`, async () => schemaConverterTester('scalar_types'))
   it(`circular reference`, async () => schemaConverterTester('circular_reference'))
+  it(`empty types`, async () => schemaConverterTester('empty_types'))
 })

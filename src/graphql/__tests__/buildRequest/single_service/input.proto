@@ -5,7 +5,7 @@ service BuildRequest {
     rpc GetConfig (Empty) returns (GetConfigResponse) {
     }
     // list proto config
-    rpc ListConfig (ListConfigRequest) returns (ListConfigResponse) { // this comment should be ignore
+    rpc ListConfig (ListConfigRequest) returns (ListConfigResponse) { // this comment will be ignore
     }
 
     rpc SetConfig (SetConfigRequest) returns (SetConfigResponse) {

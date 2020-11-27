@@ -8,9 +8,13 @@ import {
   AllField,
   EnhancedReflectionObject,
   LINE_FEED,
+  getMapKeys,
 } from '../utils'
 import { isEmpty } from 'lodash'
-import { createProtoTypeByMapField } from '../createMapMessage'
+import {
+  createProtoTypeByMapField,
+  DEFAULT_MAP_FIELD,
+} from '../createMapMessage'
 
 const ScalarTypeMap = {
   double: 'number',
@@ -53,6 +57,8 @@ export function createEnumType(enumMessage: protobuf.Enum) {
   }
   `
 }
+
+export const JsonType = `type ${DEFAULT_MAP_FIELD} = Record<string | number,any>;`
 
 export class SchemaTyping {
   private types: Map<string, string> = new Map([])
@@ -129,6 +135,10 @@ export class SchemaTyping {
   }
 
   private handleMapValue(field: AllField) {
+    if (!getMapKeys(field)) {
+      this.types.set(DEFAULT_MAP_FIELD, JsonType)
+      return DEFAULT_MAP_FIELD
+    }
     const mapMessage = createProtoTypeByMapField(field as protobuf.MapField)
     this.handleMessage(mapMessage as any)
     return mapMessage.name

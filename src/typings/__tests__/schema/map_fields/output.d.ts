@@ -17,7 +17,10 @@ export interface Id_Name_String_String_Response {
   name?: string
 }
 
+type JSON = Record<string | number,any>;
+
 export interface ScalarMap {
   //[ id , name ]
   scalar_map?: Id_Name_String_String_Response
+  map_without_comment?: JSON
 }

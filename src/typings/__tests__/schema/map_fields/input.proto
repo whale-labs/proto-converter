@@ -12,4 +12,5 @@ message Attribute {
 message ScalarMap {
   // [ id , name ]
   map<string,string> scalar_map = 1;
+  map<string,int32> map_without_comment = 2;
 }

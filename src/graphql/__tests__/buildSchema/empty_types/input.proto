@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+service RpcService{
+    rpc addUser(Empty) returns(Empty){}
+}
+
+message Empty {}

@@ -13,6 +13,7 @@ export type GenerateContent = (protoInfo: EnhancedProtoInfo) => string
 export interface CreateNestjsFileParams {
   fileType: NestjsFileType
   createImports?: GenerateContent
+  beforeCreate?: (protoInfo: ProtoInfo) => void
   createContent: GenerateContent
 }
 
@@ -36,8 +37,10 @@ export default class NestjsFile {
   private buildFile(protoInfo: ProtoInfo) {
     const { services, config } = protoInfo
     if (!services) return
+    const { beforeCreate, fileType } = this.config
     const source = this.createSource.call(this, protoInfo)
-    const fileName = createNestjsFileName(this.config.fileType)
+    const fileName = createNestjsFileName(fileType)
+    isFunction(beforeCreate) && beforeCreate(protoInfo)
     createFileWithSource({
       source,
       dir: config.outputPath,

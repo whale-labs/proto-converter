@@ -10,6 +10,7 @@ export type NestjsFileType = 'resolver' | 'service' | 'module'
 
 export const createFileNamePrefix = (type: NestjsFileType) =>
   `${getServiceName()}.${type}`
+
 export const createNestjsFileName = (type: NestjsFileType) =>
   createFileName(createFileNamePrefix(type))
 

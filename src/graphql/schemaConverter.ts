@@ -8,6 +8,8 @@ import {
   GraphQLNonNull,
   GraphQLNamedType,
   printType,
+  GraphQLString,
+  GraphQLInt,
 } from 'graphql'
 import {
   fullTypeName,
@@ -19,15 +21,32 @@ import {
   EnhancedReflectionObject,
   AllField,
   ProtoInfo,
+  getMapKeys,
 } from '../utils'
 import { isEmpty, reduce } from 'lodash'
-import { createProtoTypeByMapField } from '../createMapMessage'
+import {
+  createProtoTypeByMapField,
+  DEFAULT_MAP_FIELD,
+} from '../createMapMessage'
+
+const EMPTY_FIELDS = {
+  code: { type: GraphQLInt },
+  message: { type: GraphQLString },
+}
 
 function createEmptyObjectType(name: string) {
   return new GraphQLObjectType({
     name: name,
     fields: () => ({}),
   })
+}
+
+function isInputEmptyType(message: EnhancedReflectionObject) {
+  return (
+    !isEnum(message as protobuf.Field) &&
+    message.isInput &&
+    isEmpty((message as protobuf.Type).fieldsArray)
+  )
 }
 
 export default class SchemaConverter {
@@ -55,9 +74,10 @@ export default class SchemaConverter {
     const typeName = fullTypeName(object)
     const existedType = this.existType(typeName)
     if (existedType) return existedType
-
+    if (isInputEmptyType(object)) {
+      return
+    }
     this.parents.push(object.name)
-
     let type: GraphQLNamedType
     if (isEnum(object as protobuf.Field)) {
       type = this.convertEnum(object as protobuf.Enum)
@@ -68,13 +88,11 @@ export default class SchemaConverter {
   }
 
   private convertMessage(message: protobuf.Type) {
-    // TODO: using some defaults fields if no fields
+    const isInput = (message as any).isInput
     const fields = isEmpty(message.fieldsArray)
-      ? {}
+      ? EMPTY_FIELDS
       : this.convertFields(message)
-    return new ((message as any).isInput
-      ? GraphQLInputObjectType
-      : GraphQLObjectType)({
+    return new (isInput ? GraphQLInputObjectType : GraphQLObjectType)({
       name: fullTypeName(message),
       fields: () => fields,
     })
@@ -115,6 +133,7 @@ export default class SchemaConverter {
   }
 
   private convertMapField(mapField: protobuf.MapField) {
+    if (!getMapKeys(mapField)) return DEFAULT_MAP_FIELD
     // TODO: read the create-function from config
     const mapMessage = createProtoTypeByMapField(mapField)
     return this.convertMessageAndEnum(mapMessage)

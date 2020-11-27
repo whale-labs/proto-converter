@@ -6,6 +6,8 @@ interface EnhancedMapField extends protobuf.MapField {
   isInput?: boolean
 }
 
+export const DEFAULT_MAP_FIELD = 'JSON'
+
 function createMapMessageName(field: EnhancedMapField) {
   const { type, keyType, isInput } = field
   const keys = (getMapKeys(field) || []).sort()

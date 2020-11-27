@@ -28,6 +28,7 @@ module.exports = {
   sourcePath: './proto',
   // the output directory
   outputPath: 'src/test-result',
+  rootDir: 'src',
   // An array of proto-converter plugins
   plugins: [
     buildGraphql,
@@ -144,6 +145,7 @@ interface ConverterConfig {
   serviceName?: string
   sourcePath?: string
   outputPath?: string
+  rootDir?: string
 }
 ```
 
@@ -163,6 +165,9 @@ module.exports = {
   // optional. The directory in which all generated files are placed.
   // defaults to the root directory of your project.
   outputPath: 'src/graphql',
+  // optional. used by nestjs-plugins currently.
+  // defaults to 'src'.
+  rootDir: 'src',
   // required. An array of proto-converter plugins
   plugins: [],
 }

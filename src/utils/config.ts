@@ -12,6 +12,8 @@ export const CONFIG_PATH = systemPath.resolve(
   'proto-converter.config.js',
 )
 
+export const DEFAULT_ROOT_PATH = systemPath.resolve(PROJECT_PATH, 'src')
+
 export const PRETTIER_CONFIG = {
   proseWrap: 'never',
   singleQuote: true,
@@ -23,6 +25,7 @@ const DEFAULT_CONVERTER_CONFIG = {
   serviceName: '',
   sourcePath: PROJECT_PATH,
   outputPath: PROJECT_PATH,
+  rootDir: DEFAULT_ROOT_PATH,
   plugins: [],
 }
 
@@ -44,7 +47,7 @@ const absolutePath = (path: string) => {
 }
 
 const initConfigPath = (config: ConverterConfig) => {
-  const keys = ['sourcePath', 'outputPath']
+  const keys = ['sourcePath', 'outputPath', 'rootDir']
   keys.forEach((key) => {
     config[key] = absolutePath(config[key])
   })

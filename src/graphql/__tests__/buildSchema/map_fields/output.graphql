@@ -12,6 +12,10 @@ type Info_Zone_String_Attribute_Response {
   zone: Attribute
 }
 
+type MapWithoutComment {
+  scalar_map: JSON
+}
+
 type NestMap {
   nest_map: Info_Zone_String_Attribute_Response
 }
@@ -19,3 +23,4 @@ type NestMap {
 type ScalarMap {
   scalar_map: Id_Name_String_String_Response
 }
+

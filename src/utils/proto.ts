@@ -1,6 +1,6 @@
 import protobuf, { Namespace } from 'protobufjs'
 import { isEmpty, isString, upperFirst } from 'lodash'
-import { pathCheck, quitProcess, warnTip } from './index'
+import { pathCheck, quitProcess } from './index'
 import { getConverterConfig, getServiceName } from './config'
 import { DEFAULT_REQUIRED_KEY } from './constants'
 import {
@@ -122,16 +122,12 @@ export function isRequired(field: protobuf.ReflectionObject) {
   return comment.startsWith(DEFAULT_REQUIRED_KEY)
 }
 
-export function getMapKeys({ comment, name }: protobuf.ReflectionObject) {
-  if (!comment) {
-    return warnTip(`${name}: no comment of the map field!`)
-  }
+export function getMapKeys({ comment }: protobuf.ReflectionObject) {
+  if (!comment) return
   const keysRegex = /\[[\w,\s]+\]/g
   const matchResult = comment.match(keysRegex)
   const targetString = (matchResult?.[0] ?? '').replace(/[[\]\s]+/gm, '')
-  if (!targetString) {
-    return warnTip(`get map keys failed from comment of ${name}!`)
-  }
+  if (!targetString) return
   return targetString.split(',').sort()
 }
 

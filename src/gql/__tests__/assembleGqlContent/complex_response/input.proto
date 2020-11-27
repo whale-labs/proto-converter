@@ -17,6 +17,7 @@ message ComplexResponse {
   EnumType enum_type = 6;
   TypeC nested_type = 7;
   repeated TypeB repeated_object = 8;
+  map<string,int32> map_without_comment = 9;
 }
 
 message NestMap {

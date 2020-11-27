@@ -37,6 +37,7 @@ export const buildRequest_getConfig = gql`
       repeated_object {
         field_b
       }
+      map_without_comment
     }
   }
 `

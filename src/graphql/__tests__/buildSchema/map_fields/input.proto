@@ -13,3 +13,7 @@ message ScalarMap {
   // [ id , name ]
   map<string,string> scalar_map = 1;
 }
+
+message MapWithoutComment {
+  map<string,string> scalar_map = 1;
+}

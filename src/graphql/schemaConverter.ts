@@ -21,9 +21,13 @@ import {
   EnhancedReflectionObject,
   AllField,
   ProtoInfo,
+  getMapKeys,
 } from '../utils'
 import { isEmpty, reduce } from 'lodash'
-import { createProtoTypeByMapField } from '../createMapMessage'
+import {
+  createProtoTypeByMapField,
+  DEFAULT_MAP_FIELD,
+} from '../createMapMessage'
 
 const EMPTY_FIELDS = {
   code: { type: GraphQLInt },
@@ -129,6 +133,7 @@ export default class SchemaConverter {
   }
 
   private convertMapField(mapField: protobuf.MapField) {
+    if (!getMapKeys(mapField)) return DEFAULT_MAP_FIELD
     // TODO: read the create-function from config
     const mapMessage = createProtoTypeByMapField(mapField)
     return this.convertMessageAndEnum(mapMessage)

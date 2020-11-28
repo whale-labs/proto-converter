@@ -36,7 +36,7 @@ const EMPTY_FIELDS = {
 
 function createEmptyObjectType(name: string) {
   return new GraphQLObjectType({
-    name: name,
+    name: fullTypeName(name),
     fields: () => ({}),
   })
 }

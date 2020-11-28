@@ -1,6 +1,6 @@
 import { upperFirst } from 'lodash'
 import { Type, Field } from 'protobufjs'
-import { getMapKeys } from './utils'
+import { assembleName, getMapKeys } from './utils'
 
 interface EnhancedMapField extends protobuf.MapField {
   isInput?: boolean
@@ -12,7 +12,8 @@ function createMapMessageName(field: EnhancedMapField) {
   const { type, keyType, isInput } = field
   const keys = (getMapKeys(field) || []).sort()
   const nameSuffix = isInput ? 'request' : 'response'
-  return [...keys, keyType, type, nameSuffix].map(upperFirst).join('_')
+  const nameItems = [...keys, keyType, type, nameSuffix].map(upperFirst)
+  return assembleName(nameItems)
 }
 
 function createFieldsArray(field: EnhancedMapField) {

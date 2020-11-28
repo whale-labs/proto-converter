@@ -1,7 +1,7 @@
 import * as shell from 'shelljs'
 import { errorTip, successTip } from './log'
 import { format, Options as PrettierOptions } from 'prettier'
-import { PROJECT_PATH, PRETTIER_CONFIG } from './config'
+import { PROJECT_PATH, PRETTIER_CONFIG, FILENAME_COMBINATOR } from './config'
 import { camelCase, isFunction, isObject, isString } from 'lodash'
 import { LINE_FEED } from './constants'
 
@@ -20,6 +20,9 @@ const getPrettierConfig = () => {
 }
 
 const prettierConfig = getPrettierConfig()
+
+export const assembleName = (...args: (string[] | string)[]) =>
+  args.flat().join(FILENAME_COMBINATOR)
 
 export const quitProcess = (message: string) => {
   errorTip(message)
@@ -103,7 +106,7 @@ export const createFileWithSource = ({
 }
 
 export const createGraphqlMethodName = ({ name, parent }: protobuf.Method) =>
-  [parent?.name, name].map(camelCase).join('_')
+  assembleName([parent?.name, name].map(camelCase))
 
 export const createGqlMethodName = (method: protobuf.Method) =>
   createGraphqlMethodName(method)

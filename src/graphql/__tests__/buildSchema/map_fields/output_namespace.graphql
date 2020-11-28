@@ -1,0 +1,26 @@
+type Test_Attribute {
+  value: String
+}
+
+type Test_Id_Name_String_String_Response {
+  id: String
+  name: String
+}
+
+type Test_Info_Zone_String_Attribute_Response {
+  info: Test_Attribute
+  zone: Test_Attribute
+}
+
+type Test_MapWithoutComment {
+  scalar_map: JSON
+}
+
+type Test_NestMap {
+  nest_map: Test_Info_Zone_String_Attribute_Response
+}
+
+type Test_ScalarMap {
+  scalar_map: Test_Id_Name_String_String_Response
+}
+

@@ -14,6 +14,10 @@ export const CONFIG_PATH = systemPath.resolve(
 
 export const DEFAULT_ROOT_PATH = systemPath.resolve(PROJECT_PATH, 'src')
 
+export const FILENAME_COMBINATOR = '_'
+
+export const INPUT_TYPE_SUFFIX = 'Input'
+
 export const PRETTIER_CONFIG = {
   proseWrap: 'never',
   singleQuote: true,

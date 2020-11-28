@@ -179,9 +179,15 @@ module.exports = {
 
 ```proto
 message GetConfigResponse {
-  // required
-  string name = 1;
-  string path = 2;
+   // required, valid tag
+  string field_a = 1;
+  //       required      valid tag
+  string field_b = 2;
+  string field_c = 3; // required valid tag
+  // something required  invalid tag
+  string field_d = 4;
+  // something
+  string field_e = 5; // required invalid tag this comment will be ignore
 }
 ```
 
@@ -189,11 +195,12 @@ message GetConfigResponse {
 
 ```proto
 message GetConfigResponse {
-  // [ id, name ]
-  map<string,string> scalar_map = 1;
+  // [id,name] valid tag，return { id: string, name: string }
+  map<string,string> field_a = 1;
+  // [ id , name ] valid tag
+  map<string,string> field_b = 2;
+  // no tag, return Record<string|number, any> as the
+  // field value of types
+  map<string,string> field_d = 2;
 }
 ```
-
-## todo
-
-- map JSON

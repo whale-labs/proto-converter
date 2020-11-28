@@ -39,7 +39,7 @@ function nestedMessage(messages: Messages) {
 
 function redundancyMessage(messages: Messages) {
   expect(messages.length).toBe(3)
-  expect(messages[0].name).toBe('AddressInput')
+  expect(messages[0].name).toBe('Address_Input')
   expect(findMessage(messages,'RedundancyMessage')).toBeFalsy()
 }
 
@@ -50,12 +50,12 @@ function importMessage(messages: Messages) {
 
 function inputMessage(messages: Messages) {
   expect(messages.length).toBe(8)
-  expect(findMessage(messages,'UserInfoInput')).toBeTruthy()
+  expect(findMessage(messages,'UserInfo_Input')).toBeTruthy()
   expect(findMessage(messages,'UserInfo')).toBeTruthy()
-  expect(findMessage(messages,'ListParamsInput')).toBeTruthy()
-  expect(findMessage(messages,'AddressInput')).toBeTruthy()
+  expect(findMessage(messages,'ListParams_Input')).toBeTruthy()
+  expect(findMessage(messages,'Address_Input')).toBeTruthy()
   expect(findMessage(messages,'Address')).toBeTruthy()
-  expect(findMessage(messages,'SameReferenceInput')).toBeTruthy()
+  expect(findMessage(messages,'SameReference_Input')).toBeTruthy()
   expect(findMessage(messages,'SameReference')).toBeTruthy()
 
   expect(findMessage(messages,'ListResponse')).toBeTruthy()

@@ -1,0 +1,23 @@
+type Test_TypeA {
+  field_a: Test_TypeA_TypeD
+  field_b: Test_TypeA_TypeD
+}
+
+type Test_TypeA_TypeD {
+  nest_field_b: Test_TypeA_TypeD_TypeE
+}
+
+enum Test_TypeA_TypeD_TypeE {
+  BAD
+  GOOD
+  BETTER
+}
+
+type Test_TypeB {
+  field_b: String
+}
+
+type Test_TypeC {
+  field_a: Test_TypeA
+  field_b: Test_TypeB
+}

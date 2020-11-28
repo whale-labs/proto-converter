@@ -3,12 +3,12 @@ type Address {
   city: String
 }
 
-input AddressInput {
+input Address_Input {
   province: String
   city: String
 }
 
-input UniqueReqInput {
+input UniqueReq_Input {
   field_a: String
 }
 
@@ -18,8 +18,8 @@ type UserInfo {
   address: Address
 }
 
-input UserInfoInput {
+input UserInfo_Input {
   name: String
   age: Int
-  address: AddressInput
+  address: Address_Input
 }

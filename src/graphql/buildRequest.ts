@@ -13,6 +13,7 @@ import {
   ProtoInfo,
   DEFAULT_REQUEST_PREFIX,
   createGraphqlMethodName,
+  LINE_FEED,
 } from '../utils'
 import { Method } from 'protobufjs'
 
@@ -70,7 +71,7 @@ const createGraphqlRequest = ({ proto, root }: ProtoInfo) => {
   return [
     createGraphqlMethods(querys),
     createGraphqlMethods(mutations, 'Mutation'),
-  ].join('\n\n')
+  ].join(`${LINE_FEED}${LINE_FEED}`)
 }
 
 export default createGraphqlRequest

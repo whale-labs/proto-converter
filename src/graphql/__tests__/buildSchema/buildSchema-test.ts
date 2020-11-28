@@ -18,3 +18,17 @@ describe('build schema', () => {
   it(`circular reference`, async () => schemaConverterTester('circular_reference'))
   it(`empty types`, async () => schemaConverterTester('empty_types'))
 })
+
+
+const nsTester = testerFactory({
+  path: __dirname,
+  createSourceFunc: createSchemaSource,
+  serviceName: 'test',
+  outputFileName: 'output_namespace.graphql'
+})
+
+describe('build schema with namespace', () => {
+  it(`circular reference`, async () => nsTester('circular_reference'))
+  it(`nested messages`, async () => nsTester('nested_messages'))
+  it(`map fields`, async () => nsTester('map_fields'))
+})

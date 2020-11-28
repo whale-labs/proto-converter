@@ -1,12 +1,13 @@
 import { isEmpty } from 'lodash'
-import { isScalar, isType, lookup } from '.'
+import { assembleName, isScalar, isType, lookup } from '.'
 import { cloneFields, cloneMessage } from './cloneUtils'
+import { INPUT_TYPE_SUFFIX } from './config'
 import { getMethods } from './proto'
 
 export function createInputName(name: string) {
   // handle import type, example: "proto.converter.TestReq"
   const typeName = name.split('.').pop() || ''
-  return typeName.concat('Input')
+  return assembleName(typeName, INPUT_TYPE_SUFFIX)
 }
 
 export function addMessageToNamespace(

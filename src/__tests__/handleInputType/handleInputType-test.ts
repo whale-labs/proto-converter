@@ -7,8 +7,8 @@ const DIR = __dirname
 describe('hanndle input types', () => {
   it(`all types`, async () => tester('input_messages', inputMessage))
   it('create input name', () => {
-    expect(createInputName('TestReq')).toBe('TestReqInput')
-    expect(createInputName('proto.converter.TestReq')).toBe('TestReqInput')
+    expect(createInputName('TestReq')).toBe('TestReq_Input')
+    expect(createInputName('proto.converter.TestReq')).toBe('TestReq_Input')
   })
 })
 
@@ -29,20 +29,20 @@ function inputMessage({ nested }: protobuf.Namespace) {
   expect(Object.values(types).length).toBe(12)
   expect(types['RpcService']).toBeTruthy()
 
-  expect((types['UserInfoInput'] as any).fields?.address.type).toBe('AddressInput')
-  expect((types['UserInfoInput'] as any).fields?.imported.type).toBe('ToBeImportedInput')
+  expect((types['UserInfo_Input'] as any).fields?.address.type).toBe('Address_Input')
+  expect((types['UserInfo_Input'] as any).fields?.imported.type).toBe('ToBeImported_Input')
   expect((types['UserInfo'] as any).fields?.address.type).toBe('Address')
-  expect(types['AddressInput']).toBeTruthy()
+  expect(types['Address_Input']).toBeTruthy()
   expect(types['Address']).toBeTruthy()
-  expect(types['SameReferenceInput']).toBeTruthy()
+  expect(types['SameReference_Input']).toBeTruthy()
   expect(types['SameReference']).toBeTruthy()
-  expect(types['ListParamsInput']).toBeTruthy()
+  expect(types['ListParams_Input']).toBeTruthy()
   expect(types['ListParams']).toBeTruthy()
 
-  expect(types['ToBeImportedInput']).toBeTruthy()
+  expect(types['ToBeImported_Input']).toBeTruthy()
   expect(types['ToBeImported']).toBeFalsy()
-  
-  expect(types['NestedImportInput']).toBeTruthy()
+
+  expect(types['NestedImport_Input']).toBeTruthy()
   expect(types['NestedImport']).toBeFalsy()
 
   expect(types['ListResponse']).toBeTruthy()

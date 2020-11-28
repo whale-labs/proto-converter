@@ -1,4 +1,11 @@
-import { getMethods, isScalar, lookup, isType, quitProcess } from './utils'
+import {
+  getMethods,
+  isScalar,
+  lookup,
+  isType,
+  quitProcess,
+  assembleName,
+} from './utils'
 import { isEmpty, isString, values, each, sortBy } from 'lodash'
 
 export interface EnhancedReflectionObject extends protobuf.ReflectionObject {
@@ -9,7 +16,7 @@ export type Messages = EnhancedReflectionObject[]
 
 function createNestMessageName({ name, parent }: protobuf.Type) {
   if (isType(parent) && parent?.name) {
-    return `${parent.name}_${name}`
+    return assembleName(parent.name, name)
   }
   return name
 }

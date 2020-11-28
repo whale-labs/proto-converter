@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs'
 
 export interface IBuildRequest {
-  getConfig(req: EmptyInput): Observable<Empty>
+  getConfig(req: Empty_Input): Observable<Empty>
 }
 
 export interface Empty {}
-export interface EmptyInput {}
+export interface Empty_Input {}

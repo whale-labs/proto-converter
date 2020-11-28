@@ -6,9 +6,9 @@ type Query {
   """
   list proto config
   """
-  buildRequest_listConfig(req: ListConfigRequestInput): ListConfigResponse
+  buildRequest_listConfig(req: ListConfigRequest_Input): ListConfigResponse
 }
 
 type Mutation {
-  buildRequest_setConfig(req: SetConfigRequestInput): SetConfigResponse
+  buildRequest_setConfig(req: SetConfigRequest_Input): SetConfigResponse
 }

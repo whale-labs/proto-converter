@@ -1,6 +1,6 @@
 import protobuf, { Namespace } from 'protobufjs'
 import { isEmpty, isString, upperFirst } from 'lodash'
-import { pathCheck, quitProcess } from './index'
+import { assembleName, pathCheck, quitProcess } from './index'
 import { getConverterConfig, getServiceName } from './config'
 import { DEFAULT_REQUIRED_KEY } from './constants'
 import {
@@ -112,7 +112,8 @@ export function fullTypeName(
   const prefix = needPrefix && serviceName ? upperFirst(serviceName) : ''
   const name = isString(type) ? type : type!.name
   const suffix = isMapField(type) ? 'Map' : ''
-  return [prefix, name, suffix].filter(Boolean).join('_')
+  const nameItems = [prefix, name, suffix].filter(Boolean)
+  return assembleName(nameItems)
 }
 
 export function isRequired(field: protobuf.ReflectionObject) {

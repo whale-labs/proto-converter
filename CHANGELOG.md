@@ -1,6 +1,16 @@
-## [0.4.2](https://github.com/whale-labs/proto-converter/compare/v0.4.1...v0.4.2) (2020-11-26)
+## [0.4.3](https://github.com/whale-labs/proto-converter/compare/v0.4.2...v0.4.3) (2020-11-28)
 
-## [0.4.1](https://github.com/whale-labs/proto-converter/compare/v0.4.0...v0.4.1) (2020-11-26)
+### Bug Fixes
+
+- **GraphQL:** fix the value of circular reference field when using service name as namespace
+
+### Code Refactoring
+
+- adjust the way of assembling input-type name
+
+## [0.4.2](https://github.com/whale-labs/proto-converter/compare/v0.4.1...v0.4.2) (2020-11-27)
+
+## [0.4.1](https://github.com/whale-labs/proto-converter/compare/v0.4.0...v0.4.1) (2020-11-27)
 
 ### Features
 
